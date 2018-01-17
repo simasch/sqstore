@@ -3,22 +3,15 @@
              version="2.0">
     <persistence-unit name="store" transaction-type="RESOURCE_LOCAL">
 
-        <class>store.entity.customer.Address</class>
-        <class>store.entity.customer.Customer</class>
-        <class>store.entity.customer.BusinessCustomer</class>
-        <class>store.entity.customer.PrivateCustomer</class>
-        <class>store.entity.order.PurchaseOrder</class>
-        <class>store.entity.order.PurchaseOrderItem</class>
-        <class>store.entity.product.Price</class>
-        <class>store.entity.product.Product</class>
+        <class>store.customer.entity.Customer</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>
-            <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:mem:storedb"/>
+            <property name="hibernate.connection.driver_class" value="org.h2.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:storedb"/>
             <property name="javax.persistence.jdbc.user" value="sa"/>
             <property name="javax.persistence.jdbc.password" value=""/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
             <property name="hibernate.hbm2ddl.auto" value="update"/>
         </properties>
     </persistence-unit>
