@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import store.BaseTestWithEntityManager;
 
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
