@@ -10,6 +10,9 @@
         <class>store.inventory.entity.Product</class>
         <class>store.inventory.entity.Price</class>
 
+        <class>store.order.entity.Order</class>
+        <class>store.order.entity.OrderItem</class>
+
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>
