@@ -13,6 +13,12 @@ public class Customer {
     @NotNull
     private String name;
 
+    @Embedded
+    private Address address;
+
+    @Embedded
+    private CreditCard creditCard;
+
     public Integer getId() {
         return id;
     }

@@ -4,6 +4,12 @@
     <persistence-unit name="store" transaction-type="RESOURCE_LOCAL">
 
         <class>store.customer.entity.Customer</class>
+        <class>store.customer.entity.Address</class>
+        <class>store.customer.entity.CreditCard</class>
+
+        <class>store.inventory.entity.Product</class>
+        <class>store.inventory.entity.Price</class>
+
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>
