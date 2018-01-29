@@ -1,5 +1,8 @@
 package store.customer.control;
 
+import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Query;
+import org.apache.deltaspike.data.api.Repository;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 
@@ -7,24 +10,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class CustomerRepository {
+@Repository
+public interface CustomerRepository extends EntityRepository<Customer, Integer> {
 
-    private EntityManager em;
+    @Query("select c from Customer c where c.name = ?1")
+    List<Customer> findCustomerByName(String name);
 
-    public CustomerRepository(EntityManager em) {
-        this.em = em;
-    }
+    @Query("select new store.customer.entity.CustomerInfoDTO(c.id, c.name) from Customer c where c.name = ?1")
+    List<CustomerInfoDTO> findCustomerInfoDTOs(String name);
 
-    public List<Customer> findCustomerByName(String name) {
-        TypedQuery<Customer> query = em.createQuery("select c from Customer c where c.name = :name", Customer.class);
-        query.setParameter("name", name);
-        return query.getResultList();
-    }
-
-    public List<CustomerInfoDTO> findCustomerInfoDTOs(String name) {
-        TypedQuery<CustomerInfoDTO> query = em.createQuery("select new store.customer.entity.CustomerInfoDTO(c.id, c.name) " +
-                "from Customer c where c.name = :name", CustomerInfoDTO.class);
-        query.setParameter("name", name);
-        return query.getResultList();
-    }
 }

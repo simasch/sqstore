@@ -5,6 +5,7 @@ import store.customer.entity.Customer;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.faces.bean.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,15 +14,8 @@ import javax.persistence.PersistenceContext;
 @Singleton
 public class CustomerGenerator {
 
-    @PersistenceContext
+    @Inject
     private EntityManager em;
-
-    public CustomerGenerator() {
-    }
-
-    public CustomerGenerator(EntityManager em) {
-        this.em = em;
-    }
 
     @PostConstruct
     public void insertCustomerPeterMuster() {
