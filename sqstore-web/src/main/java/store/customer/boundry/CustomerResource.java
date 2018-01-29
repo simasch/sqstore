@@ -1,8 +1,11 @@
 package store.customer.boundry;
 
+import store.customer.control.CustomerDeltaSpikeRepository;
 import store.customer.control.CustomerRepository;
 import store.customer.entity.CustomerInfoDTO;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,10 +17,11 @@ import java.util.List;
 @Path("customers")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@Stateless
 public class CustomerResource {
 
     @Inject
-    private CustomerRepository customerRepository;
+    private CustomerDeltaSpikeRepository customerRepository;
 
     @GET
     public List<CustomerInfoDTO> getCustomers() {

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CustomerRepository {
 
-    EntityManager em;
+    private EntityManager em;
 
     public CustomerRepository(EntityManager em) {
         this.em = em;
