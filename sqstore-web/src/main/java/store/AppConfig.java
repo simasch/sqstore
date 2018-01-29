@@ -1,4 +1,4 @@
-package store.customer.boundry;
+package store;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
