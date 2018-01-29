@@ -1,6 +1,7 @@
 package store.customer.boundry;
 
 import store.customer.control.CustomerRepository;
+import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 
 import javax.ejb.Stateless;
@@ -22,7 +23,15 @@ public class CustomerResource {
     private CustomerRepository customerRepository;
 
     @GET
-    public List<CustomerInfoDTO> getCustomers() {
-        return customerRepository.findCustomerInfoDTOs("Peter Muster");
+    @Path("v1")
+    public List<CustomerInfoDTO> getCustomerDtos() {
+        return customerRepository.findCustomerInfoDTOByName("Peter Muster");
     }
+
+    @GET
+    @Path("v2")
+    public List<Customer> getCustomers() {
+        return customerRepository.findByName("Peter Muster");
+    }
+
 }

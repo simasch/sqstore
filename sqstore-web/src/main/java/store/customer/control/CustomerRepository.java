@@ -13,10 +13,9 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends EntityRepository<Customer, Integer> {
 
-    @Query("select c from Customer c where c.name = ?1")
-    List<Customer> findCustomerByName(String name);
+    List<Customer> findByName(String name);
 
     @Query("select new store.customer.entity.CustomerInfoDTO(c.id, c.name) from Customer c where c.name = ?1")
-    List<CustomerInfoDTO> findCustomerInfoDTOs(String name);
+    List<CustomerInfoDTO> findCustomerInfoDTOByName(String name);
 
 }

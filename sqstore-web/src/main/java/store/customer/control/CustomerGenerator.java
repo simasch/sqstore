@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
 @Singleton
 public class CustomerGenerator {
 
-    @Inject
+    @PersistenceContext
     private EntityManager em;
 
     @PostConstruct
