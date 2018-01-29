@@ -17,10 +17,8 @@ public class CustomerRepositoryTest extends BaseTestWithEntityManager {
 
     @Before
     public void insertCustomer() {
-        Customer customer = new Customer();
-        customer.setName(PETER_MUSTER);
-        em.persist(customer);
-        em.flush();
+        CustomerGenerator customerGenerator = new CustomerGenerator(em);
+        customerGenerator.insertCustomerPeterMuster();
     }
 
     @Test
