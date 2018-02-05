@@ -13,9 +13,9 @@ import javax.jms.TextMessage;
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
         @ActivationConfigProperty(propertyName = "destination", propertyValue = "CustomerQueue")})
-public class CustomerConsumer implements MessageListener {
+public class CustomerMessageConsumer implements MessageListener {
 
-    private final static Logger LOGGER = Logger.getLogger(CustomerConsumer.class);
+    private final static Logger LOGGER = Logger.getLogger(CustomerMessageConsumer.class);
 
     @Override
     public void onMessage(Message message) {

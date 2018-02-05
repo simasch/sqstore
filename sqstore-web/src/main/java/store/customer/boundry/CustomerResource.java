@@ -6,6 +6,7 @@ import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -19,6 +20,8 @@ public class CustomerResource {
     private CustomerRepository customerRepository;
     @Inject
     private CustomerMessageSender customerMessageSender;
+    @Inject
+    private Event<Customer> customerEvent;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -36,6 +39,10 @@ public class CustomerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public void addCustomer(Customer customer) {
         customerRepository.save(customer);
+
         customerMessageSender.sendMessage("Customer created: " + customer.getName());
+
+        customerEvent.fire(customer);
+        customerEvent.fire(customer);
     }
 }
