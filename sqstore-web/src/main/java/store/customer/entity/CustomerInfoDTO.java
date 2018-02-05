@@ -1,5 +1,7 @@
 package store.customer.entity;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 public class CustomerInfoDTO {
 
     private final Integer id;

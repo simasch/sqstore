@@ -38,4 +38,20 @@ public class CustomerRepositoryTest extends BaseTestWithEntityManager {
 
         Assert.assertEquals(1, list.size());
     }
+
+    @Test
+    public void findAll() {
+        CustomerRepository customerRepository = new CustomerRepository(em);
+        List<Customer> list = customerRepository.findAll();
+
+        Assert.assertEquals(1, list.size());
+    }
+
+    @Test
+    public void findAllDTOs() {
+        CustomerRepository customerRepository = new CustomerRepository(em);
+        List<CustomerInfoDTO> list = customerRepository.findAllDTOs();
+
+        Assert.assertEquals(1, list.size());
+    }
 }

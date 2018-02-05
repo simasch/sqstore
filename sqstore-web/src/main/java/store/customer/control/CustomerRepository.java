@@ -3,28 +3,54 @@ package store.customer.control;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
+@Stateless
 public class CustomerRepository {
 
-    EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
-    public CustomerRepository(EntityManager em) {
+    // Default Constructur is used by the EJB container to instantiate this EJB
+    public CustomerRepository() {
+    }
+
+    // This consturctor is only used for unit testing
+    CustomerRepository(EntityManager em) {
         this.em = em;
     }
 
     public List<Customer> findCustomerByName(String name) {
-        TypedQuery<Customer> query = em.createQuery("select c from Customer c where c.name = :name", Customer.class);
-        query.setParameter("name", name);
-        return query.getResultList();
+        TypedQuery<Customer> q = em.createNamedQuery(Customer.FIND_BY_NAME, Customer.class);
+        q.setParameter(Customer.NAME, name);
+        return q.getResultList();
     }
 
     public List<CustomerInfoDTO> findCustomerInfoDTOs(String name) {
-        TypedQuery<CustomerInfoDTO> query = em.createQuery("select new store.customer.entity.CustomerInfoDTO(c.id, c.name) " +
-                "from Customer c where c.name = :name", CustomerInfoDTO.class);
-        query.setParameter("name", name);
+        TypedQuery<CustomerInfoDTO> query = em.createNamedQuery(Customer.FIND_BY_NAME_AS_DTO, CustomerInfoDTO.class);
+        query.setParameter(Customer.NAME, name);
         return query.getResultList();
+    }
+
+    public List<Customer> findAll() {
+        TypedQuery<Customer> query = em.createNamedQuery(Customer.FIND_ALL, Customer.class);
+        return query.getResultList();
+    }
+
+    public List<CustomerInfoDTO> findAllDTOs() {
+        TypedQuery<CustomerInfoDTO> query = em.createNamedQuery(Customer.FIND_ALL_AS_DTO, CustomerInfoDTO.class);
+        return query.getResultList();
+    }
+
+    public void save(Customer customer) {
+        if (customer.getId() == null) {
+            em.persist(customer);
+        } else {
+            em.merge(customer);
+        }
     }
 }
