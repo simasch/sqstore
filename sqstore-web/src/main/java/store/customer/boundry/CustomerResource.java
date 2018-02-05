@@ -1,6 +1,7 @@
 package store.customer.boundry;
 
 import store.customer.control.CustomerRepository;
+import store.customer.control.CustomerMessageSender;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 
@@ -16,6 +17,8 @@ public class CustomerResource {
 
     @Inject
     private CustomerRepository customerRepository;
+    @Inject
+    private CustomerMessageSender customerMessageSender;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -33,5 +36,6 @@ public class CustomerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public void addCustomer(Customer customer) {
         customerRepository.save(customer);
+        customerMessageSender.sendMessage("Customer created: " + customer.getName());
     }
 }
