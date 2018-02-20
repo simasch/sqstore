@@ -3,6 +3,8 @@ package store.customer.control;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 
+import javax.cache.annotation.CacheDefaults;
+import javax.cache.annotation.CacheResult;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,11 +17,11 @@ public class CustomerRepository {
     @PersistenceContext
     private EntityManager em;
 
-    // Default Constructur is used by the EJB container to instantiate this EJB
+    // Default constructor is used by the EJB container to instantiate this EJB
     public CustomerRepository() {
     }
 
-    // This consturctor is only used for unit testing
+    // This constructor is only used for unit testing
     CustomerRepository(EntityManager em) {
         this.em = em;
     }
@@ -36,6 +38,7 @@ public class CustomerRepository {
         return query.getResultList();
     }
 
+    @CacheResult(cacheName = "customer-cache")
     public List<Customer> findAll() {
         TypedQuery<Customer> query = em.createNamedQuery(Customer.FIND_ALL, Customer.class);
         return query.getResultList();
