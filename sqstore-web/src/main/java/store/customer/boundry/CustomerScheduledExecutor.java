@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 public class CustomerScheduledExecutor {
 
-
     @Resource
     private ManagedScheduledExecutorService managedScheduledExecutorService;
 
