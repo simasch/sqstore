@@ -17,8 +17,6 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 public class CustomerScheduledExecutor {
 
-    private final static Logger LOGGER = Logger.getLogger(CustomerService.class);
-
     @Resource
     private ManagedScheduledExecutorService managedScheduledExecutorService;
 
