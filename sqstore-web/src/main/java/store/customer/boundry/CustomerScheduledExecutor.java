@@ -22,18 +22,16 @@ public class CustomerScheduledExecutor {
     @Resource
     private ManagedScheduledExecutorService managedScheduledExecutorService;
 
+    @EJB
+    private CustomerService customerService;
+
     @PostConstruct
     public void init() {
-        managedScheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    CustomerService customerService =
-                            InitialContext.doLookup("java:module/" + CustomerService.class.getSimpleName());
-                    customerService.tick();
-                } catch (NamingException e) {
-                    LOGGER.warn(e.getMessage(), e);
-                }
+        managedScheduledExecutorService.scheduleAtFixedRate(() -> {
+            try {
+                customerService.tick();
+            } catch (Exception e) {
+                LOGGER.warn(e.getMessage(), e);
             }
         }, 10, 10, TimeUnit.SECONDS);
     }
