@@ -14,7 +14,7 @@ public class CustomerTimer {
     @EJB
     private CustomerService customerService;
 
-    @Schedule(hour = "*", minute = "*", second = "*/10")
+    @Schedule(hour = "*", minute = "5")
     public void tick() {
         customerService.tick();
     }

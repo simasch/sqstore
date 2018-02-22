@@ -23,7 +23,7 @@ public class CustomerScheduledExecutor {
 
     @PostConstruct
     public void init() {
-        managedScheduledExecutorService.scheduleAtFixedRate(customerService::tick, 3, 7, TimeUnit.SECONDS);
+        managedScheduledExecutorService.scheduleAtFixedRate(customerService::tick, 10, 10, TimeUnit.SECONDS);
     }
 
 }
