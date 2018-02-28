@@ -21,7 +21,7 @@ public class CacheProducer {
     @Produces
     public Configuration defaultCacheConfiguration() {
         return new ConfigurationBuilder()
-                .expiration().lifespan(60000l)
+                .expiration().lifespan(60000L)
                 .build();
     }
 

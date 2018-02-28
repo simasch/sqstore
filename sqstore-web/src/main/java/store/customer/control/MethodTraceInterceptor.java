@@ -40,7 +40,7 @@ public class MethodTraceInterceptor {
                 if (!first) {
                     params.append(", ");
                 }
-                params.append("" + param);
+                params.append(param);
                 first = false;
             }
         }
