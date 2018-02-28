@@ -2,6 +2,10 @@ package store.customer.entity;
 
 import javax.persistence.Embeddable;
 
+/**
+ * Using {@link Embeddable} it's possible to map the content of one database table to multiple classes.
+ * In contrast to {@link javax.persistence.Entity} {@link Embeddable} don't have it's own identity.
+ */
 @Embeddable
 public class Address {
 

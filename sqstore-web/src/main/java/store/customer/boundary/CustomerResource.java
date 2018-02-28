@@ -84,9 +84,9 @@ public class CustomerResource {
     /**
      * The difference between POST and PUT is that PUT should behave idempotent = SQL UPDATE
      * POST is more like SQL INSERT
-     *
+     * <p>
      * Here we don't want to distinguish between UPDATE and INSERT so POST is ok.
-     *
+     * <p>
      * The customer object is passed as JSON data and unmarshalled by the JSON processor
      *
      * @param customer

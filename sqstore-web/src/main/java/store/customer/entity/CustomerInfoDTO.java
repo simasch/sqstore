@@ -2,6 +2,10 @@ package store.customer.entity;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * A DTO represents a data container.
+ * See Martin Fowlers enterprise pattern: https://martinfowler.com/eaaCatalog/dataTransferObject.html
+ */
 @XmlRootElement
 public class CustomerInfoDTO {
 
