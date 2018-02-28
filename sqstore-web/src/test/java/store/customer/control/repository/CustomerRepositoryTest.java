@@ -1,14 +1,13 @@
-package store.customer.control;
+package store.customer.control.repository;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import store.BaseTestWithEntityManager;
-import store.customer.control.CustomerRepository;
+import store.customer.control.repository.CustomerRepository;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 
-import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 

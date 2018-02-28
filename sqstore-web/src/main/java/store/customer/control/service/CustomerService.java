@@ -1,11 +1,13 @@
-package store.customer.control;
+package store.customer.control.service;
 
 import org.apache.log4j.Logger;
-import store.customer.boundry.CustomerTimer;
+import store.customer.control.repository.CustomerRepository;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
+import store.interceptor.MethodTraceInterceptor;
 
 import javax.annotation.Resource;
+import javax.cache.annotation.CacheResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -14,7 +16,6 @@ import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -31,11 +32,16 @@ public class CustomerService {
     @Resource(mappedName = "java:/jms/queue/CustomerQueue")
     private Queue queue;
 
-    @EJB
+    @Inject
     private CustomerRepository customerRepository;
 
     public void tick() {
         LOGGER.info("Time is " + LocalDateTime.now().toString());
+    }
+
+    @Asynchronous
+    public void tickAsync() {
+        tick();
     }
 
     @Asynchronous
@@ -59,4 +65,7 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
+    public Customer findCustomerById(Integer id) {
+        return customerRepository.findById(id);
+    }
 }

@@ -1,14 +1,9 @@
-package store.customer.control;
+package store.interceptor;
 
 import org.apache.log4j.Logger;
-import org.jboss.logging.MDC;
 
-import javax.annotation.Resource;
-import javax.ejb.EJBTransactionRolledbackException;
-import javax.ejb.SessionContext;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
-import javax.persistence.OptimisticLockException;
 
 public class MethodTraceInterceptor {
 
