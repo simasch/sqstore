@@ -1,8 +1,10 @@
-package store.customer.control;
+package store.customer.boundry;
 
+import store.customer.control.CustomerService;
 import store.customer.entity.Customer;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.faces.bean.ApplicationScoped;
@@ -18,20 +20,18 @@ import java.util.List;
 public class CustomerGenerator {
 
     public static final String PETER_MUSTER = "Peter Muster";
-    @PersistenceContext
-    private EntityManager em;
+
+    @EJB
+    private CustomerService customerService;
 
     @PostConstruct
     public void insertCustomerPeterMuster() {
-        TypedQuery<Customer> q = em.createNamedQuery(Customer.FIND_BY_NAME, Customer.class);
-        q.setParameter(Customer.NAME, PETER_MUSTER);
-        List<Customer> list = q.getResultList();
+        Customer customer = customerService.findCustomerByName(PETER_MUSTER);
 
-        if (list.isEmpty()) {
-            Customer customer = new Customer();
+        if (customer == null) {
+            customer = new Customer();
             customer.setName(PETER_MUSTER);
-            em.persist(customer);
-            em.flush();
+            customerService.saveCustomer(customer);
         }
     }
 }

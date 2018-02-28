@@ -27,6 +27,7 @@ public class Customer {
     private Integer id;
 
     @NotNull
+    @Column(unique = true)
     private String name;
 
     @Embedded

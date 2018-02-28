@@ -21,6 +21,7 @@ public class CustomerMessageConsumer implements MessageListener {
     public void onMessage(Message message) {
         try {
             TextMessage textMessage = (TextMessage) message;
+
             LOGGER.info(textMessage.getText());
         } catch (JMSException e) {
             throw new RuntimeException(e);

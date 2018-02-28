@@ -26,10 +26,10 @@ public class CustomerRepository {
         this.em = em;
     }
 
-    public List<Customer> findCustomerByName(String name) {
+    public Customer findCustomerByName(String name) {
         TypedQuery<Customer> q = em.createNamedQuery(Customer.FIND_BY_NAME, Customer.class);
         q.setParameter(Customer.NAME, name);
-        return q.getResultList();
+        return q.getSingleResult();
     }
 
     public List<CustomerInfoDTO> findCustomerInfoDTOs(String name) {

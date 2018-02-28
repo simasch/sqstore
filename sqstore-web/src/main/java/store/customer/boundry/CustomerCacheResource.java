@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 @Path("cache")
 @Stateless
-public class CacheResource {
+public class CustomerCacheResource {
 
     @Inject
     @CustomerCache

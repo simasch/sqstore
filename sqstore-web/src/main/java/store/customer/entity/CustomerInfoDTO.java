@@ -2,6 +2,7 @@ package store.customer.entity;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class CustomerInfoDTO {
 
     private final Integer id;

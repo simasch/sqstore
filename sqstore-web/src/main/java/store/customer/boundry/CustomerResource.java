@@ -2,6 +2,7 @@ package store.customer.boundry;
 
 import store.customer.control.CustomerRepository;
 import store.customer.control.CustomerMessageSender;
+import store.customer.control.CustomerService;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 
@@ -17,32 +18,29 @@ import java.util.List;
 public class CustomerResource {
 
     @Inject
-    private CustomerRepository customerRepository;
-    @Inject
-    private CustomerMessageSender customerMessageSender;
+    private CustomerService customerService;
     @Inject
     private Event<Customer> customerEvent;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<CustomerInfoDTO> getCustomers() {
-        return customerRepository.findAllDTOs();
+        return customerService.findAllCustomers();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public List<Customer> getCustomersAsXml() {
-        return customerRepository.findAll();
+    public List<CustomerInfoDTO> getCustomersAsXml() {
+        return customerService.findAllCustomers();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void addCustomer(Customer customer) {
-        customerRepository.save(customer);
+        customerService.saveCustomer(customer);
 
-        customerMessageSender.sendMessage("Customer created: " + customer.getName());
+        customerService.sendMessage("Customer created: " + customer.getName());
 
-        customerEvent.fire(customer);
         customerEvent.fire(customer);
     }
 }

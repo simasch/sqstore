@@ -26,9 +26,10 @@ public class CustomerRepositoryTest extends BaseTestWithEntityManager {
     @Test
     public void findCustomer() {
         CustomerRepository customerRepository = new CustomerRepository(em);
-        List<Customer> list = customerRepository.findCustomerByName(PETER_MUSTER);
+        Customer customer = customerRepository.findCustomerByName(PETER_MUSTER);
 
-        Assert.assertEquals(1, list.size());
+        Assert.assertNotNull(customer);
+        Assert.assertEquals(PETER_MUSTER, customer.getName());
     }
 
     @Test
@@ -37,6 +38,7 @@ public class CustomerRepositoryTest extends BaseTestWithEntityManager {
         List<CustomerInfoDTO> list = customerRepository.findCustomerInfoDTOs(PETER_MUSTER);
 
         Assert.assertEquals(1, list.size());
+        Assert.assertEquals(PETER_MUSTER, list.get(0).getName());
     }
 
     @Test
@@ -45,6 +47,7 @@ public class CustomerRepositoryTest extends BaseTestWithEntityManager {
         List<Customer> list = customerRepository.findAll();
 
         Assert.assertEquals(1, list.size());
+        Assert.assertEquals(PETER_MUSTER, list.get(0).getName());
     }
 
     @Test
@@ -53,5 +56,6 @@ public class CustomerRepositoryTest extends BaseTestWithEntityManager {
         List<CustomerInfoDTO> list = customerRepository.findAllDTOs();
 
         Assert.assertEquals(1, list.size());
+        Assert.assertEquals(PETER_MUSTER, list.get(0).getName());
     }
 }
