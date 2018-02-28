@@ -11,12 +11,16 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Stateless
+@Interceptors({MethodTraceInterceptor.class})
 public class CustomerService {
 
     private final static Logger LOGGER = Logger.getLogger(CustomerService.class);
@@ -47,7 +51,7 @@ public class CustomerService {
         return customerRepository.findAllDTOs();
     }
 
-    public Customer findCustomerByName(String name) {
+    public Optional<Customer> findCustomerByName(String name) {
         return customerRepository.findCustomerByName(name);
     }
 

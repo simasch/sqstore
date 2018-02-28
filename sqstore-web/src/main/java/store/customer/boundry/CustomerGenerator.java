@@ -14,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 @Startup
 @Singleton
@@ -26,10 +27,10 @@ public class CustomerGenerator {
 
     @PostConstruct
     public void insertCustomerPeterMuster() {
-        Customer customer = customerService.findCustomerByName(PETER_MUSTER);
+        Optional<Customer> optionalCustomer = customerService.findCustomerByName(PETER_MUSTER);
 
-        if (customer == null) {
-            customer = new Customer();
+        if (!optionalCustomer.isPresent()) {
+            Customer customer = new Customer();
             customer.setName(PETER_MUSTER);
             customerService.saveCustomer(customer);
         }

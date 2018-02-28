@@ -10,6 +10,7 @@ import store.customer.entity.CustomerInfoDTO;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 public class CustomerRepositoryTest extends BaseTestWithEntityManager {
 
@@ -26,10 +27,10 @@ public class CustomerRepositoryTest extends BaseTestWithEntityManager {
     @Test
     public void findCustomer() {
         CustomerRepository customerRepository = new CustomerRepository(em);
-        Customer customer = customerRepository.findCustomerByName(PETER_MUSTER);
+        Optional<Customer> customerOptional = customerRepository.findCustomerByName(PETER_MUSTER);
 
-        Assert.assertNotNull(customer);
-        Assert.assertEquals(PETER_MUSTER, customer.getName());
+        Assert.assertTrue(customerOptional.isPresent());
+        Assert.assertEquals(PETER_MUSTER, customerOptional.get().getName());
     }
 
     @Test

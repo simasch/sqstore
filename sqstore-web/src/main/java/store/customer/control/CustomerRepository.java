@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 @Stateless
 public class CustomerRepository {
@@ -26,10 +27,17 @@ public class CustomerRepository {
         this.em = em;
     }
 
-    public Customer findCustomerByName(String name) {
+    public Optional<Customer> findCustomerByName(String name) {
         TypedQuery<Customer> q = em.createNamedQuery(Customer.FIND_BY_NAME, Customer.class);
         q.setParameter(Customer.NAME, name);
-        return q.getSingleResult();
+        List<Customer> list = q.getResultList();
+        if (list.isEmpty()) {
+            return Optional.empty();
+        } else if (list.size() == 1) {
+            return Optional.of(list.get(0));
+        } else {
+            throw new IllegalStateException("More than one customer found!");
+        }
     }
 
     public List<CustomerInfoDTO> findCustomerInfoDTOs(String name) {

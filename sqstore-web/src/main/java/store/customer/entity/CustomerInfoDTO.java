@@ -5,8 +5,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class CustomerInfoDTO {
 
-    private final Integer id;
-    private final String name;
+    private Integer id;
+    private String name;
+
+    public CustomerInfoDTO() {
+    }
 
     public CustomerInfoDTO(Integer id, String name) {
         this.id = id;
@@ -17,7 +20,15 @@ public class CustomerInfoDTO {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
