@@ -42,15 +42,6 @@ public class CustomerRepositoryTest extends BaseTestWithEntityManager {
     }
 
     @Test
-    public void findAll() {
-        CustomerRepository customerRepository = new CustomerRepository(em);
-        List<Customer> list = customerRepository.findAll();
-
-        Assert.assertEquals(1, list.size());
-        Assert.assertEquals(PETER_MUSTER, list.get(0).getName());
-    }
-
-    @Test
     public void findAllDTOs() {
         CustomerRepository customerRepository = new CustomerRepository(em);
         List<CustomerInfoDTO> list = customerRepository.findAllDTOs();
