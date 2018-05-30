@@ -2,6 +2,7 @@ package store.customer.control.repository;
 
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
+import store.customer.entity.Customer_;
 import store.interceptor.MethodTraceInterceptor;
 
 import javax.cache.annotation.CacheResult;
@@ -10,6 +11,9 @@ import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,6 +78,24 @@ public class CustomerRepository {
         } else {
             throw new IllegalStateException("More than one customer found!");
         }
+    }
+
+    /**
+     * Returns a customer with a given name.
+     * <p>
+     * The query is created using the Criteria API
+     *
+     * @param name
+     * @return list of {@link Customer}
+     */
+    public List<Customer> findCustomersByName(String name) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Customer> cq = cb.createQuery(Customer.class);
+
+        Root<Customer> customer = cq.from(Customer.class);
+        cq.where(cb.equal(customer.get(Customer_.name), name));
+
+        return em.createQuery(cq).getResultList();
     }
 
     /**

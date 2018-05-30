@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import store.BaseTestWithEntityManager;
-import store.customer.control.repository.CustomerRepository;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 
@@ -30,6 +29,15 @@ public class CustomerRepositoryTest extends BaseTestWithEntityManager {
 
         Assert.assertTrue(customerOptional.isPresent());
         Assert.assertEquals(PETER_MUSTER, customerOptional.get().getName());
+    }
+
+    @Test
+    public void findCustomersByName() {
+        CustomerRepository customerRepository = new CustomerRepository(em);
+        List<Customer> list = customerRepository.findCustomersByName(PETER_MUSTER);
+
+        Assert.assertFalse(list.isEmpty());
+        Assert.assertEquals(PETER_MUSTER, list.get(0).getName());
     }
 
     @Test
