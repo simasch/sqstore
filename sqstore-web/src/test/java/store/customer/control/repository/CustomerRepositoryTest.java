@@ -10,13 +10,18 @@ import store.customer.entity.CustomerInfoDTO;
 import java.util.List;
 import java.util.Optional;
 
+import static store.order.entity.Order_.customer;
+
 public class CustomerRepositoryTest extends BaseTestWithEntityManager {
 
     public static final String PETER_MUSTER = "Peter Muster";
 
+    private static CustomerRepository customerRepository = new CustomerRepository(em);
+    private Customer customer;
+
     @Before
     public void insertCustomer() {
-        Customer customer = new Customer();
+        customer = new Customer();
         customer.setName(PETER_MUSTER);
         em.persist(customer);
         em.flush();
@@ -24,7 +29,6 @@ public class CustomerRepositoryTest extends BaseTestWithEntityManager {
 
     @Test
     public void findCustomer() {
-        CustomerRepository customerRepository = new CustomerRepository(em);
         Optional<Customer> customerOptional = customerRepository.findCustomerByName(PETER_MUSTER);
 
         Assert.assertTrue(customerOptional.isPresent());
@@ -33,7 +37,6 @@ public class CustomerRepositoryTest extends BaseTestWithEntityManager {
 
     @Test
     public void findCustomersByName() {
-        CustomerRepository customerRepository = new CustomerRepository(em);
         List<Customer> list = customerRepository.findCustomersByName(PETER_MUSTER);
 
         Assert.assertFalse(list.isEmpty());
@@ -41,8 +44,7 @@ public class CustomerRepositoryTest extends BaseTestWithEntityManager {
     }
 
     @Test
-    public void findCustomerDTO() {
-        CustomerRepository customerRepository = new CustomerRepository(em);
+    public void findCustomerInfoDTOs() {
         List<CustomerInfoDTO> list = customerRepository.findCustomerInfoDTOs(PETER_MUSTER);
 
         Assert.assertEquals(1, list.size());
@@ -51,10 +53,16 @@ public class CustomerRepositoryTest extends BaseTestWithEntityManager {
 
     @Test
     public void findAllDTOs() {
-        CustomerRepository customerRepository = new CustomerRepository(em);
         List<CustomerInfoDTO> list = customerRepository.findAllDTOs();
 
         Assert.assertEquals(1, list.size());
         Assert.assertEquals(PETER_MUSTER, list.get(0).getName());
+    }
+
+    @Test
+    public void findById() {
+        Optional<Customer> optionalCustomer = customerRepository.findById(customer.getId());
+
+        Assert.assertTrue(optionalCustomer.isPresent());
     }
 }
