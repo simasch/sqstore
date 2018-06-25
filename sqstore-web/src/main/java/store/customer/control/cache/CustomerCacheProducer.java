@@ -11,7 +11,7 @@ import javax.enterprise.inject.Produces;
  * Configures the CustomerCache.
  * <p>
  * Caching is a common performance optimization strategy.
- * But with every performance optimization strategy caching has advantages and disadvantage.
+ * But as every performance optimization strategy caching has advantages and disadvantage.
  * Some of the disadvantages are the lost of statelessness. That will break distribution and scaling that are
  * very important in the age of cloud computing.
  * <p>
