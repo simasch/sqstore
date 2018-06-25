@@ -105,7 +105,7 @@ public class CustomerService {
      * @return list of {@link CustomerInfoDTO}
      */
     public List<CustomerInfoDTO> findAllCustomers() {
-        return customerRepository.findAllDTOs();
+        return customerRepository.findAllCustomerInfoDTO();
     }
 
     /**
@@ -114,7 +114,7 @@ public class CustomerService {
      * @return {@link CustomerInfoDTO}
      */
     public Optional<Customer> findCustomerByName(String name) {
-        return customerRepository.findCustomerByName(name);
+        return customerRepository.findByName(name);
     }
 
     /**

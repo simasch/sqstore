@@ -62,7 +62,7 @@ public class CustomerRepository extends JpaRepository<Customer, Integer> {
      * @param name
      * @return {@link Optional}
      */
-    public Optional<Customer> findCustomerByName(String name) {
+    public Optional<Customer> findByName(String name) {
         TypedQuery<Customer> q = em.createNamedQuery(Customer.FIND_BY_NAME, Customer.class);
         q.setParameter(Customer.NAME, name);
         List<Customer> list = q.getResultList();
@@ -83,7 +83,7 @@ public class CustomerRepository extends JpaRepository<Customer, Integer> {
      * @param name
      * @return list of {@link Customer}
      */
-    public List<Customer> findCustomersByName(String name) {
+    public List<Customer> findAllByName(String name) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Customer> cq = cb.createQuery(Customer.class);
 
@@ -103,7 +103,7 @@ public class CustomerRepository extends JpaRepository<Customer, Integer> {
      * @param name
      * @return list of {@link CustomerInfoDTO}
      */
-    public List<CustomerInfoDTO> findCustomerInfoDTOs(String name) {
+    public List<CustomerInfoDTO> findAllCustomerInfoDTOByName(String name) {
         TypedQuery<CustomerInfoDTO> query = em.createNamedQuery(Customer.FIND_BY_NAME_AS_DTO, CustomerInfoDTO.class);
         query.setParameter(Customer.NAME, name);
         return query.getResultList();
@@ -119,7 +119,7 @@ public class CustomerRepository extends JpaRepository<Customer, Integer> {
      *
      * @return list of {@link CustomerInfoDTO}
      */
-    public List<CustomerInfoDTO> findAllDTOs() {
+    public List<CustomerInfoDTO> findAllCustomerInfoDTO() {
         TypedQuery<CustomerInfoDTO> query = em.createNamedQuery(Customer.FIND_ALL_AS_DTO, CustomerInfoDTO.class);
         return query.getResultList();
     }

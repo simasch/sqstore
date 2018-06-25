@@ -1,6 +1,5 @@
 package store.customer.control.service;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -51,7 +50,7 @@ public class CustomerServiceUsingMockitoTest {
 
     @Test
     public void findCustomerByName() {
-        when(customerRepository.findCustomerByName("Test")).thenReturn(Optional.of(createTestCustomer()));
+        when(customerRepository.findByName("Test")).thenReturn(Optional.of(createTestCustomer()));
 
         Optional<Customer> optionalCustomer = customerService.findCustomerByName("Test");
 
