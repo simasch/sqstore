@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import store.customer.control.repository.CustomerRepository;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
-import store.interceptor.MethodTraceInterceptor;
+import store.common.interceptor.MethodTraceInterceptor;
 
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
@@ -130,9 +130,9 @@ public class CustomerService {
      * {@see CustomerRepository}
      *
      * @param id
-     * @return {@link Customer}
+     * @return optional {@link Customer}
      */
-    public Customer findCustomerById(Integer id) {
+    public Optional<Customer> findCustomerById(Integer id) {
         return customerRepository.findById(id);
     }
 }

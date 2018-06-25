@@ -1,15 +1,12 @@
 package store.order.entity;
 
+import store.common.entity.JpaEntity;
 import store.inventory.entity.Product;
 
 import javax.persistence.*;
 
 @Entity
-public class OrderItem {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class OrderItem extends JpaEntity {
 
     private Integer amount;
 
@@ -18,14 +15,6 @@ public class OrderItem {
 
     @ManyToOne
     private Order order;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Integer getAmount() {
         return amount;

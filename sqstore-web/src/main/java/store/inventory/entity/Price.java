@@ -1,15 +1,14 @@
 package store.inventory.entity;
 
-import javax.persistence.*;
+import store.common.entity.JpaEntity;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 import java.sql.Date;
 
 @Entity
-public class Price {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Price extends JpaEntity {
 
     private Date validFrom;
     private Date validTo;
@@ -18,14 +17,6 @@ public class Price {
 
     @ManyToOne
     private Product product;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Date getValidFrom() {
         return validFrom;

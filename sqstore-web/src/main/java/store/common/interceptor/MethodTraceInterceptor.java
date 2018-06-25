@@ -1,4 +1,4 @@
-package store.interceptor;
+package store.common.interceptor;
 
 import org.apache.log4j.Logger;
 

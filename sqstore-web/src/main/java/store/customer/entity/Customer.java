@@ -1,5 +1,7 @@
 package store.customer.entity;
 
+import store.common.entity.JpaEntity;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
                 @NamedQuery(name = Customer.FIND_BY_NAME_AS_DTO, query = "select new store.customer.entity.CustomerInfoDTO(c.id, c.name) from Customer c where c.name = :" + Customer.NAME + " order by c.name")
         }
 )
-public class Customer {
+public class Customer extends JpaEntity {
 
     /**
      * It's good style to define constants for the names of the queries and the parameters.
@@ -31,14 +33,6 @@ public class Customer {
     public static final String FIND_BY_NAME = "Customer.findByName";
     public static final String FIND_BY_NAME_AS_DTO = "Customer.findDtoByName";
     public static final String NAME = "name";
-
-    /**
-     * Every {@link Entity} needs an {@link Id} = primary key in the database.
-     * The strategy defines how the primary key is generated.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
     /**
      * We want to have a not null and a unique constraint for the database table column name.
@@ -58,14 +52,6 @@ public class Customer {
      */
     @Embedded
     private CreditCard creditCard;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

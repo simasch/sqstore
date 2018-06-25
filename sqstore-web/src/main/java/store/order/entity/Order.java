@@ -1,5 +1,6 @@
 package store.order.entity;
 
+import store.common.entity.JpaEntity;
 import store.customer.entity.Customer;
 
 import javax.persistence.*;
@@ -8,24 +9,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "purchase_order")
-public class Order {
-
-    @Id
-    private Integer id;
+public class Order extends JpaEntity{
 
     @ManyToOne
     private Customer customer;
 
     @OneToMany(mappedBy = "order")
     private Set<OrderItem> orderItems = new HashSet<>();
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Set<OrderItem> getOrderItems() {
         return orderItems;

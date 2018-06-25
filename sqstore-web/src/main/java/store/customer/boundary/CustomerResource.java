@@ -9,7 +9,9 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * REST resource that provides access to customer data.
@@ -78,7 +80,12 @@ public class CustomerResource {
     @GET
     @Path("{id}")
     public Customer getCustomerByName(@PathParam("id") Integer id) {
-        return customerService.findCustomerById(id);
+        Optional<Customer> optionalCustomer = customerService.findCustomerById(id);
+        if (optionalCustomer.isPresent()) {
+            return optionalCustomer.get();
+        } else {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
     }
 
     /**

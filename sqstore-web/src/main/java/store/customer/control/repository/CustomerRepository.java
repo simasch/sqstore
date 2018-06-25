@@ -1,9 +1,10 @@
 package store.customer.control.repository;
 
+import store.common.control.repository.JpaRepository;
+import store.common.interceptor.MethodTraceInterceptor;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 import store.customer.entity.Customer_;
-import store.interceptor.MethodTraceInterceptor;
 
 import javax.cache.annotation.CacheResult;
 import javax.ejb.Stateless;
@@ -30,20 +31,13 @@ import java.util.Optional;
  */
 @Stateless
 @Interceptors({MethodTraceInterceptor.class})
-public class CustomerRepository {
-
-    /**
-     * To get access to the {@link EntityManager} we use {@link PersistenceContext} annotation.
-     * <p>
-     * If there is only one persistence unit (e.g. persistence.xml) we don't need to declare a name.
-     */
-    @PersistenceContext
-    private EntityManager em;
+public class CustomerRepository extends JpaRepository<Customer, Integer> {
 
     /**
      * Default constructor is used by the EJB container to instantiate this EJB
      */
     public CustomerRepository() {
+        super(Customer.class);
     }
 
     /**
@@ -52,6 +46,7 @@ public class CustomerRepository {
      * @param em the {@link EntityManager}
      */
     CustomerRepository(EntityManager em) {
+        this();
         this.em = em;
     }
 
@@ -62,7 +57,7 @@ public class CustomerRepository {
      * doesn't exists.
      * It's a better style to return {@see Optional} when the result can be null.
      * If we would simply return a {@link Customer} the consumer would not see that this can be null and this
-     * could leed to a {@link java.lang.NullPointerException}
+     * could lead to a {@link java.lang.NullPointerException}
      *
      * @param name
      * @return {@link Optional}
@@ -130,26 +125,8 @@ public class CustomerRepository {
     }
 
     @CacheResult(cacheName = "customer-cache")
-    public Customer findById(Integer id) {
-        return em.find(Customer.class, id);
+    public Optional<Customer> findById(Integer id) {
+        return super.findById(id);
     }
 
-    /**
-     * Either insert or update the passed customer.
-     * <p>
-     * It's important to distinguish between persist and merge.
-     * Especially if you want to change the customer after save because merge will return a proxy object of the
-     * customer and you MUST use that one. Never use the object that you pass to merge!
-     *
-     * @param customer
-     * @return {@link Customer}
-     */
-    public Customer save(Customer customer) {
-        if (customer.getId() == null) {
-            em.persist(customer);
-        } else {
-            customer = em.merge(customer);
-        }
-        return customer;
-    }
 }
