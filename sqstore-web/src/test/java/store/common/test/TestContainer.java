@@ -75,7 +75,7 @@ public class TestContainer implements AutoCloseable, Serializable {
             Class<?> injectme = clazz;
             while (injectme != null) {
                 inject(injectme, bean);
-                handleDao(injectme, bean);
+                handleRepository(injectme, bean);
                 injectme = injectme.getSuperclass();
             }
 
@@ -87,7 +87,7 @@ public class TestContainer implements AutoCloseable, Serializable {
         return null;
     }
 
-    private <T> void handleDao(Class<?> clazz, T bean) throws IllegalAccessException {
+    private <T> void handleRepository(Class<?> clazz, T bean) throws IllegalAccessException {
         if (clazz.getSimpleName().endsWith("Repository")) {
             try {
                 Field field = clazz.getDeclaredField("em");

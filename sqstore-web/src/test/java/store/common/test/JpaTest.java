@@ -1,4 +1,4 @@
-package store;
+package store.common.test;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -6,17 +6,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
 /**
- * The {@link BaseTestWithEntityManager} is used to provide the handling of starting and stopping
+ * The {@link JpaTest} is used to provide the handling of starting and stopping
  * the {@link EntityManager}
  */
-public abstract class BaseTestWithEntityManager {
+public abstract class JpaTest {
 
-    protected static EntityManagerFactory emf;
+    protected static TestContainer testContainer;
     protected static EntityManager em;
     protected EntityTransaction transaction;
 
@@ -43,26 +41,21 @@ public abstract class BaseTestWithEntityManager {
     }
 
     /**
-     * This method is called only before the first test method execution.
+     * This method is called beofre all test methods.
      * {@see BeforeClass}
      */
     @BeforeClass
-    public static void beforeClass() {
-        emf = Persistence.createEntityManagerFactory("store");
-        em = emf.createEntityManager();
+    public static void beforeClassSuper() {
+        testContainer = new TestContainer("store");
+        em = testContainer.getEntityManager();
     }
 
     /**
      * This method is called after all test methods were executed.
-     * {@see BeforeClass}
+     * {@see AfterClass}
      */
     @AfterClass
-    public static void afterClass() {
-        if (em.isOpen()) {
-            em.close();
-        }
-        if (emf.isOpen()) {
-            emf.close();
-        }
+    public static void afterClassSuper() throws Exception {
+        testContainer.close();
     }
 }
