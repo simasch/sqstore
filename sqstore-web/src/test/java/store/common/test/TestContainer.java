@@ -24,6 +24,8 @@ public class TestContainer implements AutoCloseable, Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private static TestContainer instance;
+
     private static final String JAVAX_PERSISTENCE_JDBC_URL = "javax.persistence.jdbc.url";
     private static final String DATABASE_URL = "DATABASE_URL";
 
@@ -32,8 +34,15 @@ public class TestContainer implements AutoCloseable, Serializable {
     private final DummySessionContext sessionContext;
     private final Map<Class<?>, Object> statelessBeans;
 
+    public static TestContainer getInstance() {
+        if (instance == null) {
+            instance = new TestContainer("store");
+        }
+        return instance;
+    }
+
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public TestContainer(String persistenceUnitName) {
+    private TestContainer(String persistenceUnitName) {
         this.statelessBeans = new HashMap();
         sessionContext = new DummySessionContext();
 

@@ -1,8 +1,8 @@
 package store.customer.control.service;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import store.common.test.JpaTest;
+import store.common.test.TestContainer;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 
@@ -13,12 +13,7 @@ import static org.junit.Assert.*;
 
 public class CustomerServiceUsingTestContainerTest extends JpaTest {
 
-    private static CustomerService customerService;
-
-    @BeforeClass
-    public static void init() {
-        customerService = testContainer.getBean(CustomerService.class);
-    }
+    private CustomerService customerService = TestContainer.getInstance().getBean(CustomerService.class);
 
     @Test
     public void tick() {

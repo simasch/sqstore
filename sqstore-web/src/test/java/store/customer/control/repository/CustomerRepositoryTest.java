@@ -2,9 +2,9 @@ package store.customer.control.repository;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import store.common.test.JpaTest;
+import store.common.test.TestContainer;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 
@@ -18,14 +18,9 @@ public class CustomerRepositoryTest extends JpaTest {
 
     public static final String PETER_MUSTER = "Peter Muster";
 
-    private static CustomerRepository customerRepository;
+    private CustomerRepository customerRepository = TestContainer.getInstance().getBean(CustomerRepository.class);
 
     private Customer customer;
-
-    @BeforeClass
-    public static void beforeClass() {
-        customerRepository = testContainer.getBean(CustomerRepository.class);
-    }
 
     @Before
     public void generateTestData() {

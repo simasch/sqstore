@@ -5,6 +5,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
@@ -14,8 +15,7 @@ import javax.persistence.EntityTransaction;
  */
 public abstract class JpaTest {
 
-    protected static TestContainer testContainer;
-    protected static EntityManager em;
+    protected static EntityManager em = TestContainer.getInstance().getEntityManager();
     protected EntityTransaction transaction;
 
     /**
@@ -40,22 +40,4 @@ public abstract class JpaTest {
         }
     }
 
-    /**
-     * This method is called beofre all test methods.
-     * {@see BeforeClass}
-     */
-    @BeforeClass
-    public static void beforeClassSuper() {
-        testContainer = new TestContainer("store");
-        em = testContainer.getEntityManager();
-    }
-
-    /**
-     * This method is called after all test methods were executed.
-     * {@see AfterClass}
-     */
-    @AfterClass
-    public static void afterClassSuper() throws Exception {
-        testContainer.close();
-    }
 }
