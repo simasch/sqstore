@@ -7,12 +7,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 /**
- * The {@link ContainerTest} is used to provide the handling of starting and stopping
+ * The {@link ApplicationContextTest} is used to provide the handling of starting and stopping
  * the {@link EntityManager}
  */
-public abstract class ContainerTest {
+public abstract class ApplicationContextTest {
 
-    protected static EntityManager em = TestContainer.getInstance().getEntityManager();
+    protected static ApplicationContext applicationContext = new ApplicationContext("test");
+    protected static EntityManager em = applicationContext.getEntityManager();
     protected EntityTransaction transaction;
 
     /**

@@ -3,8 +3,7 @@ package store.customer.control.repository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import store.common.test.ContainerTest;
-import store.common.test.TestContainer;
+import store.common.test.ApplicationContextTest;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 
@@ -14,11 +13,11 @@ import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class CustomerRepositoryTest extends ContainerTest {
+public class CustomerRepositoryTest extends ApplicationContextTest {
 
     public static final String PETER_MUSTER = "Peter Muster";
 
-    private CustomerRepository customerRepository = TestContainer.getInstance().getBean(CustomerRepository.class);
+    private CustomerRepository customerRepository = applicationContext.getBean(CustomerRepository.class);
 
     private Customer customer;
 

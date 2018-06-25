@@ -16,15 +16,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The TestContainer provides basic dependency injection for EJBs and CDI Beans.
+ * The ApplicationContext provides basic dependency injection for EJBs and CDI Beans.
  * <p>
  * Everything is a singleton.
  */
-public class TestContainer implements AutoCloseable, Serializable {
+public class ApplicationContext implements AutoCloseable, Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    private static TestContainer instance;
 
     private static final String JAVAX_PERSISTENCE_JDBC_URL = "javax.persistence.jdbc.url";
     private static final String JAVAX_PERSISTENCE_JDBC_USER = "javax.persistence.jdbc.user";
@@ -37,19 +35,13 @@ public class TestContainer implements AutoCloseable, Serializable {
     private final DummySessionContext sessionContext;
     private final Map<Class<?>, Object> statelessBeans;
 
-    public static TestContainer getInstance() {
-        if (instance == null) {
-            instance = new TestContainer();
-        }
-        return instance;
-    }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private TestContainer() {
+    public ApplicationContext(String persistenceUnitName) {
         this.statelessBeans = new HashMap();
         sessionContext = new DummySessionContext();
 
-        emf = Persistence.createEntityManagerFactory("test", getPropertyMap());
+        emf = Persistence.createEntityManagerFactory(persistenceUnitName, getPropertyMap());
         em = emf.createEntityManager();
     }
 
