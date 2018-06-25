@@ -38,6 +38,7 @@ public abstract class JpaTest {
         if (transaction.isActive()) {
             transaction.rollback();
         }
+        em.clear();
     }
 
 }

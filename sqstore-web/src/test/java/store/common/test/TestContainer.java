@@ -27,7 +27,10 @@ public class TestContainer implements AutoCloseable, Serializable {
     private static TestContainer instance;
 
     private static final String JAVAX_PERSISTENCE_JDBC_URL = "javax.persistence.jdbc.url";
-    private static final String DATABASE_URL = "DATABASE_URL";
+    private static final String JAVAX_PERSISTENCE_JDBC_USER = "javax.persistence.jdbc.user";
+    private static final String JAVAX_PERSISTENCE_JDBC_PASSWORD = "javax.persistence.jdbc.password";
+    private static final String HIBERNATE_CONNECTION_DRIVER_CLASS = "hibernate.connection.driver_class";
+    private static final String HIBERNATE_DIALECT = "hibernate.dialect";
 
     private final EntityManagerFactory emf;
     private final EntityManager em;
@@ -36,25 +39,37 @@ public class TestContainer implements AutoCloseable, Serializable {
 
     public static TestContainer getInstance() {
         if (instance == null) {
-            instance = new TestContainer("store");
+            instance = new TestContainer();
         }
         return instance;
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private TestContainer(String persistenceUnitName) {
+    private TestContainer() {
         this.statelessBeans = new HashMap();
         sessionContext = new DummySessionContext();
 
-        emf = Persistence.createEntityManagerFactory(persistenceUnitName, getPropertyMap());
+        emf = Persistence.createEntityManagerFactory("test", getPropertyMap());
         em = emf.createEntityManager();
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     protected Map getPropertyMap() {
         Map<String, String> hibernateMap = new HashMap();
-        if (System.getenv().containsKey(DATABASE_URL)) {
-            hibernateMap.put(JAVAX_PERSISTENCE_JDBC_URL, System.getenv().get(DATABASE_URL));
+        if (System.getenv().containsKey(JAVAX_PERSISTENCE_JDBC_URL)) {
+            hibernateMap.put(JAVAX_PERSISTENCE_JDBC_URL, System.getenv().get(JAVAX_PERSISTENCE_JDBC_URL));
+        }
+        if (System.getenv().containsKey(JAVAX_PERSISTENCE_JDBC_USER)) {
+            hibernateMap.put(JAVAX_PERSISTENCE_JDBC_USER, System.getenv().get(JAVAX_PERSISTENCE_JDBC_USER));
+        }
+        if (System.getenv().containsKey(JAVAX_PERSISTENCE_JDBC_PASSWORD)) {
+            hibernateMap.put(JAVAX_PERSISTENCE_JDBC_PASSWORD, System.getenv().get(JAVAX_PERSISTENCE_JDBC_PASSWORD));
+        }
+        if (System.getenv().containsKey(HIBERNATE_CONNECTION_DRIVER_CLASS)) {
+            hibernateMap.put(HIBERNATE_CONNECTION_DRIVER_CLASS, System.getenv().get(HIBERNATE_CONNECTION_DRIVER_CLASS));
+        }
+        if (System.getenv().containsKey(HIBERNATE_DIALECT)) {
+            hibernateMap.put(HIBERNATE_DIALECT, System.getenv().get(HIBERNATE_DIALECT));
         }
         return hibernateMap;
     }
