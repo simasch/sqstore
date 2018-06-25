@@ -16,14 +16,14 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * So EJB timers are a good choice when you want to execute methods on a datetime like every day at 2 am.
  * <p>
- * It's a {@link Singleton} and exists only once per application server and as a {@link Startup} EJB
+ * The executor is a {@link Singleton} and exists only once per application server and as a {@link Startup} EJB
  * it's started when the application is deployed and started.
  * <p>
  * For intervals the {@link ManagedScheduledExecutorService} is the right choice.
  * <p>
  * <strong>HINT!</strong>
  * You should use Singletons with caution because they could lead to locks and waits.
- * The default {@link javax.ejb.LockType} is WRITE and therefor all the methods calls are serialized.
+ * The default {@link javax.ejb.LockType} is WRITE and therefor all the method calls are serialized.
  */
 @Startup
 @Singleton
