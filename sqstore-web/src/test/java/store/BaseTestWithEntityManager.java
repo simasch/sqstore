@@ -4,11 +4,10 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import store.common.test.TestContainer;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
 /**
  * The {@link BaseTestWithEntityManager} is used to provide the handling of starting and stopping
@@ -16,8 +15,8 @@ import javax.persistence.Persistence;
  */
 public abstract class BaseTestWithEntityManager {
 
-    protected static EntityManagerFactory emf;
-    protected static EntityManager em;
+    private static TestContainer testContainer = new TestContainer("store");
+    protected static EntityManager em = testContainer.getEntityManager();
     protected EntityTransaction transaction;
 
     /**
@@ -42,27 +41,4 @@ public abstract class BaseTestWithEntityManager {
         }
     }
 
-    /**
-     * This method is called only before the first test method execution.
-     * {@see BeforeClass}
-     */
-    @BeforeClass
-    public static void beforeClass() {
-        emf = Persistence.createEntityManagerFactory("store");
-        em = emf.createEntityManager();
-    }
-
-    /**
-     * This method is called after all test methods were executed.
-     * {@see BeforeClass}
-     */
-    @AfterClass
-    public static void afterClass() {
-        if (em.isOpen()) {
-            em.close();
-        }
-        if (emf.isOpen()) {
-            emf.close();
-        }
-    }
 }
