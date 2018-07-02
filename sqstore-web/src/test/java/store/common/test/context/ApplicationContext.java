@@ -1,4 +1,19 @@
-package store.common.test;
+package store.common.test.context;
+
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import net.ttddyy.dsproxy.listener.ChainListener;
+import net.ttddyy.dsproxy.listener.DataSourceQueryCountListener;
+import net.ttddyy.dsproxy.listener.logging.DefaultQueryLogEntryCreator;
+import net.ttddyy.dsproxy.listener.logging.SLF4JQueryLoggingListener;
+import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
+import org.hibernate.engine.jdbc.internal.FormatStyle;
+import org.hibernate.engine.jdbc.internal.Formatter;
+import org.hibernate.integrator.spi.Integrator;
+import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.hibernate.jpa.boot.spi.IntegratorProvider;
+import store.common.test.hibernate.DataSourceProvider;
+import store.common.test.hibernate.Database;
+import store.common.test.hibernate.PersistenceUnitInfoForTest;
 
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -7,13 +22,15 @@ import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.spi.PersistenceUnitInfo;
+import javax.sql.DataSource;
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The ApplicationContext provides basic dependency injection for EJBs and CDI Beans.
@@ -24,13 +41,7 @@ public class ApplicationContext implements AutoCloseable, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String JAVAX_PERSISTENCE_JDBC_URL = "javax.persistence.jdbc.url";
-    private static final String JAVAX_PERSISTENCE_JDBC_USER = "javax.persistence.jdbc.user";
-    private static final String JAVAX_PERSISTENCE_JDBC_PASSWORD = "javax.persistence.jdbc.password";
-    private static final String HIBERNATE_CONNECTION_DRIVER_CLASS = "hibernate.connection.driver_class";
-    private static final String HIBERNATE_DIALECT = "hibernate.dialect";
-
-    private final EntityManagerFactory emf;
+    private EntityManagerFactory emf;
     private final EntityManager em;
     private final DummySessionContext sessionContext;
     private final Map<Class<?>, Object> statelessBeans;
@@ -41,29 +52,17 @@ public class ApplicationContext implements AutoCloseable, Serializable {
         this.statelessBeans = new HashMap();
         sessionContext = new DummySessionContext();
 
-        emf = Persistence.createEntityManagerFactory(persistenceUnitName, getPropertyMap());
-        em = emf.createEntityManager();
-    }
+        PersistenceUnitInfo persistenceUnitInfo = persistenceUnitInfo(getClass().getSimpleName());
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    protected Map getPropertyMap() {
-        Map<String, String> hibernateMap = new HashMap();
-        if (System.getenv().containsKey(JAVAX_PERSISTENCE_JDBC_URL)) {
-            hibernateMap.put(JAVAX_PERSISTENCE_JDBC_URL, System.getenv().get(JAVAX_PERSISTENCE_JDBC_URL));
+        Map<String, Object> configuration = new HashMap<>();
+
+        Integrator integrator = integrator();
+        if (integrator != null) {
+            configuration.put("hibernate.integrator_provider", (IntegratorProvider) () -> Collections.singletonList(integrator));
         }
-        if (System.getenv().containsKey(JAVAX_PERSISTENCE_JDBC_USER)) {
-            hibernateMap.put(JAVAX_PERSISTENCE_JDBC_USER, System.getenv().get(JAVAX_PERSISTENCE_JDBC_USER));
-        }
-        if (System.getenv().containsKey(JAVAX_PERSISTENCE_JDBC_PASSWORD)) {
-            hibernateMap.put(JAVAX_PERSISTENCE_JDBC_PASSWORD, System.getenv().get(JAVAX_PERSISTENCE_JDBC_PASSWORD));
-        }
-        if (System.getenv().containsKey(HIBERNATE_CONNECTION_DRIVER_CLASS)) {
-            hibernateMap.put(HIBERNATE_CONNECTION_DRIVER_CLASS, System.getenv().get(HIBERNATE_CONNECTION_DRIVER_CLASS));
-        }
-        if (System.getenv().containsKey(HIBERNATE_DIALECT)) {
-            hibernateMap.put(HIBERNATE_DIALECT, System.getenv().get(HIBERNATE_DIALECT));
-        }
-        return hibernateMap;
+
+        emf = new HibernatePersistenceProvider().createContainerEntityManagerFactory(persistenceUnitInfo, configuration);
+        em = emf.createEntityManager();
     }
 
     @Override
@@ -157,4 +156,81 @@ public class ApplicationContext implements AutoCloseable, Serializable {
         return sessionContext;
     }
 
+    protected PersistenceUnitInfoForTest persistenceUnitInfo(String name) {
+        PersistenceUnitInfoForTest persistenceUnitInfo = new PersistenceUnitInfoForTest(name, entityClassNames(), properties());
+
+        String[] resources = resources();
+        if (resources != null) {
+            persistenceUnitInfo.getMappingFileNames().addAll(Arrays.asList(resources));
+        }
+
+        return persistenceUnitInfo;
+    }
+
+    protected Class<?>[] entities() {
+        List<Class<?>> classes = new ArrayList<>();
+        new FastClasspathScanner("store")
+                .matchClassesWithAnnotation(Entity.class, c -> {
+                    classes.add(c);
+                })
+                .scan();
+
+        return classes.toArray(new Class<?>[classes.size()]);
+    }
+
+    protected String[] resources() {
+        return null;
+    }
+
+    protected List<String> entityClassNames() {
+        return Arrays.asList(entities())
+                .stream()
+                .map(Class::getName)
+                .collect(Collectors.toList());
+    }
+
+    protected Properties properties() {
+        Properties properties = new Properties();
+        DataSource dataSource = dataSource();
+        if (dataSource != null) {
+            properties.put("hibernate.connection.datasource", dataSource);
+        }
+        properties.put("hibernate.dialect", dataSourceProvider().hibernateDialect());
+        properties.put("hibernate.hbm2ddl.auto", "update");
+        properties.put("hibernate.generate_statistics", Boolean.FALSE.toString());
+        return properties;
+    }
+
+    protected DataSource dataSource() {
+        ChainListener listener = new ChainListener();
+        SLF4JQueryLoggingListener loggingListener = new SLF4JQueryLoggingListener();
+        listener.addListener(loggingListener);
+        listener.addListener(new DataSourceQueryCountListener());
+        return ProxyDataSourceBuilder
+                .create(dataSourceProvider().dataSource())
+                .name("DATA_SOURCE_PROXY")
+                .listener(listener)
+                .build();
+    }
+
+    protected DataSourceProvider dataSourceProvider() {
+        return database().dataSourceProvider();
+    }
+
+    protected Database database() {
+        return Database.HSQLDB;
+    }
+
+    protected Integrator integrator() {
+        return null;
+    }
+
+    private static class PrettyQueryEntryCreator extends DefaultQueryLogEntryCreator {
+        private Formatter formatter = FormatStyle.BASIC.getFormatter();
+
+        @Override
+        protected String formatQuery(String query) {
+            return this.formatter.format(query);
+        }
+    }
 }

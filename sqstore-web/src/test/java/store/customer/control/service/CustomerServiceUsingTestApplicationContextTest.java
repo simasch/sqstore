@@ -1,7 +1,7 @@
 package store.customer.control.service;
 
 import org.junit.Test;
-import store.common.test.ApplicationContextTest;
+import store.common.test.JpaWithH2DbTest;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import static org.junit.Assert.*;
 
-public class CustomerServiceUsingTestApplicationContextTest extends ApplicationContextTest {
+public class CustomerServiceUsingTestApplicationContextTest extends JpaWithH2DbTest {
 
     private CustomerService customerService = applicationContext.getBean(CustomerService.class);
 

@@ -3,7 +3,7 @@ package store.customer.control.repository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import store.common.test.ApplicationContextTest;
+import store.common.test.JpaWithH2DbTest;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
 
@@ -13,7 +13,7 @@ import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class CustomerRepositoryTest extends ApplicationContextTest {
+public class CustomerRepositoryTest extends JpaWithH2DbTest {
 
     public static final String PETER_MUSTER = "Peter Muster";
 
