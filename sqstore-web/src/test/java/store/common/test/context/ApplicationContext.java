@@ -4,6 +4,7 @@ import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import net.ttddyy.dsproxy.listener.ChainListener;
 import net.ttddyy.dsproxy.listener.DataSourceQueryCountListener;
 import net.ttddyy.dsproxy.listener.logging.DefaultQueryLogEntryCreator;
+import net.ttddyy.dsproxy.listener.logging.QueryLogEntryCreator;
 import net.ttddyy.dsproxy.listener.logging.SLF4JQueryLoggingListener;
 import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
 import org.hibernate.engine.jdbc.internal.FormatStyle;
@@ -202,14 +203,23 @@ public class ApplicationContext implements AutoCloseable, Serializable {
     }
 
     protected DataSource dataSource() {
+        QueryLogEntryCreator logEntryCreator = new DefaultQueryLogEntryCreator() {
+            @Override
+            protected String formatQuery(String query) {
+                return FormatStyle.BASIC.getFormatter().format(query);  // use Hibernte formatter
+            }
+        };
+
         ChainListener listener = new ChainListener();
         SLF4JQueryLoggingListener loggingListener = new SLF4JQueryLoggingListener();
+        loggingListener.setQueryLogEntryCreator(logEntryCreator);
         listener.addListener(loggingListener);
         listener.addListener(new DataSourceQueryCountListener());
         return ProxyDataSourceBuilder
                 .create(dataSourceProvider().dataSource())
                 .name("DATA_SOURCE_PROXY")
                 .listener(listener)
+                .multiline()
                 .build();
     }
 
