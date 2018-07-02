@@ -12,9 +12,9 @@ import org.hibernate.engine.jdbc.internal.Formatter;
 import org.hibernate.integrator.spi.Integrator;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.hibernate.jpa.boot.spi.IntegratorProvider;
-import store.common.test.hibernate.DataSourceProvider;
-import store.common.test.hibernate.Database;
-import store.common.test.hibernate.PersistenceUnitInfoForTest;
+import store.common.test.context.hibernate.DataSourceProvider;
+import store.common.test.context.hibernate.Database;
+import store.common.test.context.hibernate.PersistenceUnitInfoForTest;
 
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -46,10 +46,12 @@ public class ApplicationContext implements AutoCloseable, Serializable {
     private final EntityManager em;
     private final DummySessionContext sessionContext;
     private final Map<Class<?>, Object> statelessBeans;
+    private String entityBasePackage;
 
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public ApplicationContext(String persistenceUnitName) {
+    public ApplicationContext(String entityBasePackage) {
+        this.entityBasePackage = entityBasePackage;
         this.statelessBeans = new HashMap();
         sessionContext = new DummySessionContext();
 
@@ -170,7 +172,7 @@ public class ApplicationContext implements AutoCloseable, Serializable {
 
     protected Class<?>[] entities() {
         List<Class<?>> classes = new ArrayList<>();
-        new FastClasspathScanner("store")
+        new FastClasspathScanner(entityBasePackage)
                 .matchClassesWithAnnotation(Entity.class, c -> {
                     classes.add(c);
                 })

@@ -14,7 +14,7 @@ import javax.persistence.EntityTransaction;
  */
 public abstract class JpaWithH2DbTest {
 
-    protected static ApplicationContext applicationContext = new ApplicationContext("test-h2");
+    protected static ApplicationContext applicationContext = new ApplicationContext("store");
     protected static EntityManager em = applicationContext.getEntityManager();
     protected EntityTransaction transaction;
 

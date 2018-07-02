@@ -1,10 +1,11 @@
 package store.customer.control.service;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import store.common.interceptor.MethodTraceInterceptor;
 import store.customer.control.repository.CustomerRepository;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
-import store.common.interceptor.MethodTraceInterceptor;
 
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
@@ -35,7 +36,7 @@ import java.util.Optional;
 @Interceptors({MethodTraceInterceptor.class})
 public class CustomerService {
 
-    private final static Logger LOGGER = Logger.getLogger(CustomerService.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(CustomerService.class);
 
     /**
      * We need the {@link JMSContext} to send messages.

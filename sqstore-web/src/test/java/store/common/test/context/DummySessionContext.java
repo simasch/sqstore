@@ -12,12 +12,7 @@ public class DummySessionContext implements SessionContext {
     private Principal principal;
 
     public DummySessionContext() {
-        principal = new Principal() {
-            @Override
-            public String getName() {
-                return "test";
-            }
-        };
+        principal = () -> "test";
     }
 
     @Override
