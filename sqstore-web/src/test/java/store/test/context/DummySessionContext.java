@@ -1,4 +1,4 @@
-package store.common.test.context;
+package store.test.context;
 
 import javax.ejb.*;
 import javax.transaction.UserTransaction;

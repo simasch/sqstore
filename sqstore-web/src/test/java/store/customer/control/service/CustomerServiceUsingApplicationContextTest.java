@@ -1,16 +1,16 @@
 package store.customer.control.service;
 
 import org.junit.Test;
-import store.common.test.JpaWithH2DbTest;
 import store.customer.entity.Customer;
 import store.customer.entity.CustomerInfoDTO;
+import store.test.ApplicationContextTest;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
 
-public class CustomerServiceUsingTestApplicationContextTest extends JpaWithH2DbTest {
+public class CustomerServiceUsingApplicationContextTest extends ApplicationContextTest {
 
     private CustomerService customerService = applicationContext.getBean(CustomerService.class);
 

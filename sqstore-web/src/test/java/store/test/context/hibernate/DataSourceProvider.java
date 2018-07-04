@@ -1,4 +1,4 @@
-package store.common.test.context.hibernate;
+package store.test.context.hibernate;
 
 import javax.sql.DataSource;
 import java.util.Properties;

@@ -1,4 +1,4 @@
-package store.common.test.context;
+package store.test.context;
 
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import net.ttddyy.dsproxy.listener.ChainListener;
@@ -12,9 +12,9 @@ import org.hibernate.engine.jdbc.internal.Formatter;
 import org.hibernate.integrator.spi.Integrator;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.hibernate.jpa.boot.spi.IntegratorProvider;
-import store.common.test.context.hibernate.DataSourceProvider;
-import store.common.test.context.hibernate.Database;
-import store.common.test.context.hibernate.PersistenceUnitInfoForTest;
+import store.test.context.hibernate.DataSourceProvider;
+import store.test.context.hibernate.Database;
+import store.test.context.hibernate.PersistenceUnitInfoForTest;
 
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -69,7 +69,7 @@ public class ApplicationContext implements AutoCloseable, Serializable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         if (em != null && em.isOpen()) {
             em.close();
         }
